@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Booking Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book a Train Ticket</h1>
+    
+    <form id="bookingForm">
+        <label for="trainId">Train ID:</label>
+        <input type="number" id="trainId" placeholder="Enter Train ID" required>
+        
+        <label for="userId">User ID:</label>
+        <input type="number" id="userId" placeholder="Enter User ID" required>
+        
+        <button type="submit">Book Ticket</button>
+    </form>
+
+    <h2 id="result"></h2>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const train_id = document.getElementById('trainId').value;
+            const user_id = document.getElementById('userId').value;
+
+            try {
+                const response = await fetch('http://localhost:5002/api/tickets/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ train_id, user_id })
+                });
+
+                const data = await response.json();
+                document.getElementById('result').innerText = data.message;
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error booking ticket: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
